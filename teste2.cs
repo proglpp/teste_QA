@@ -14,34 +14,61 @@ class TesteAutomatizado
             driver.Navigate().GoToUrl("https://planoaliados.com.br/portal/");
             driver.Manage().Window.Maximize();
 
-            // Localizar o campo Usuário e inserir o valor
-            IWebElement campoUsuario = driver.FindElement(By.Name("usuario"));
-            campoUsuario.SendKeys("057.484.723-50");
+            try
+            {
+                // Localizar o campo Usuário e inserir o valor
+                IWebElement campoUsuario = driver.FindElement(By.Name("usuario"));
+                campoUsuario.SendKeys("057.484.723-50");
+            }
+            catch (NoSuchElementException)
+            {
+                Console.WriteLine("Erro: Campo 'Usuário' não encontrado.");
+                return;
+            }
 
-            // Localizar o campo Senha e inserir o valor
-            IWebElement campoSenha = driver.FindElement(By.Name("senha"));
-            campoSenha.SendKeys("654321");
+            try
+            {
+                // Localizar o campo Senha e inserir o valor
+                IWebElement campoSenha = driver.FindElement(By.Name("senha"));
+                campoSenha.SendKeys("654321");
+            }
+            catch (NoSuchElementException)
+            {
+                Console.WriteLine("Erro: Campo 'Senha' não encontrado.");
+                return;
+            }
 
-            // Localizar e clicar no botão Entrar
-            IWebElement botaoEntrar = driver.FindElement(By.Name("entrar"));
-            botaoEntrar.Click();
+            try
+            {
+                // Localizar e clicar no botão Entrar
+                IWebElement botaoEntrar = driver.FindElement(By.Name("entrar"));
+                botaoEntrar.Click();
+            }
+            catch (NoSuchElementException)
+            {
+                Console.WriteLine("Erro: Botão 'Entrar' não encontrado.");
+                return;
+            }
 
             // Verificar se a mensagem de sucesso é exibida
-            System.Threading.Thread.Sleep(2000); // Tempo para carregar a resposta (ajustar conforme necessário)
-            IWebElement mensagemSucesso = driver.FindElement(By.XPath("//*[contains(text(),'Login realizado com sucesso!')]"));
+            try
+            {
+                System.Threading.Thread.Sleep(2000); // Esperar o carregamento da página
+                IWebElement mensagemSucesso = driver.FindElement(By.XPath("//*[contains(text(),'Login realizado com sucesso!')]"));
 
-            if (mensagemSucesso.Displayed)
-            {
-                Console.WriteLine("Teste bem-sucedido: Mensagem de sucesso exibida.");
+                if (mensagemSucesso.Displayed)
+                {
+                    Console.WriteLine("Teste bem-sucedido: Mensagem de sucesso exibida.");
+                }
+                else
+                {
+                    Console.WriteLine("Teste falhou: Mensagem de sucesso não exibida.");
+                }
             }
-            else
+            catch (NoSuchElementException)
             {
-                Console.WriteLine("Teste falhou: Mensagem de sucesso não exibida.");
+                Console.WriteLine("Erro: Mensagem de sucesso não encontrada.");
             }
-        }
-        catch (NoSuchElementException ex)
-        {
-            Console.WriteLine($"Teste falhou: Elemento não encontrado. {ex.Message}");
         }
         catch (Exception ex)
         {
